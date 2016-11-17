@@ -107,10 +107,6 @@ def ExtractUses(project_name, source):
       uses.add("USES_WEBP")
     if re.match(r'^#include ["<]pcl/', line):
       uses.add("USES_PCL")
-    if re.match(r'^#include ["<]ros/', line):
-      uses.add("USES_ROS")
-    if re.match(r'^#include "[a-zA-Z]*_msgs/', line):
-      uses.add("USES_ROS")
     if re.match(r'^#include ["<]yaml-cpp/', line):
       uses.add("USES_YAMLCPP")
     if project_name != "cartographer":
@@ -246,8 +242,6 @@ def RunOnDirectory(root):
             continue
           target.depends.add(dependant.name)
         target.uses.update(ExtractUses(project_name, src))
-      if target.type is "google_test" and "USES_ROS" in target.uses:
-        target.type = "google_catkin_test"
 
     cmake_file = path.join(directory, "CMakeLists.txt")
     parts = GetNonGoogleTargetLines(cmake_file)
